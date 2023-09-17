@@ -17,14 +17,17 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-import logo from './assets/images/sets/Unipets.png';
 import {
   defaultThemeApp,
   defaultButtonApp,
   defaultInputApp,
   defaultTextApp,
 } from './Global';
+import StyledTextInput from './TextInput';
+import SplashScreen from 'react-native-splash-screen';
+import logo from './assets/images/sets/Unipets.png';
+import check from './assets/images/check/check.png';
+import eye from './assets/images/eye/eye.png';
 
 const App = (): JSX.Element => {
   useEffect(() => {
@@ -45,18 +48,22 @@ const App = (): JSX.Element => {
           <Image source={logo} style={styles.logo} />
 
           <View style={{width: '100%', gap: 12}}>
-            <TextInput style={styles.input} />
-
-            <Text style={{...defaultTextApp, textAlign: 'right'}}>Esqueceu sua senha?</Text>
+            <StyledTextInput label={'E-mail'} image={check} />
+            <StyledTextInput label={'Senha'} image={eye} secure={true} />
+            <Text style={{...defaultTextApp, textAlign: 'right'}}>
+              Esqueceu sua senha?
+            </Text>
           </View>
 
           <TouchableOpacity style={styles.button}>
             <Text style={{...defaultTextApp, fontSize: 18}}>Entrar</Text>
           </TouchableOpacity>
-          
+
           <View style={styles.signup}>
             <Text style={defaultTextApp}>Ainda não tem conta?</Text>
-            <Text style={{...defaultTextApp, color: '#F4516C'}}>Cadastre-se</Text>
+            <Text style={{...defaultTextApp, color: '#F4516C'}}>
+              Cadastre-se
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -81,16 +88,9 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 60,
-    paddingRight: 20,
-    borderRadius: 7,
-    backgroundColor: defaultInputApp,
-  },
   input: {
     color: '#ffffff',
+    backgroundColor: 'red',
     flex: 1,
     padding: 20,
   },
