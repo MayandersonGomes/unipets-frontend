@@ -10,19 +10,13 @@ import {
   SafeAreaView,
   View,
   StatusBar,
-  TextInput,
   StyleSheet,
   Image,
   Text,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {
-  defaultThemeApp,
-  defaultButtonApp,
-  defaultInputApp,
-  defaultTextApp,
-} from './Global';
+import {defaultThemeApp, defaultButtonApp, defaultTextApp} from './Global';
 import StyledTextInput from './TextInput';
 import SplashScreen from 'react-native-splash-screen';
 import logo from './assets/images/sets/Unipets.png';
@@ -47,23 +41,19 @@ const App = (): JSX.Element => {
         <View style={styles.container}>
           <Image source={logo} style={styles.logo} />
 
-          <View style={{width: '100%', gap: 12}}>
+          <View style={styles.inputContainer}>
             <StyledTextInput label={'E-mail'} image={check} />
             <StyledTextInput label={'Senha'} image={eye} secure={true} />
-            <Text style={{...defaultTextApp, textAlign: 'right'}}>
-              Esqueceu sua senha?
-            </Text>
+            <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </View>
 
           <TouchableOpacity style={styles.button}>
-            <Text style={{...defaultTextApp, fontSize: 18}}>Entrar</Text>
+            <Text style={styles.textButton}>Entrar</Text>
           </TouchableOpacity>
 
-          <View style={styles.signup}>
+          <View style={styles.signupContainer}>
             <Text style={defaultTextApp}>Ainda não tem conta?</Text>
-            <Text style={{...defaultTextApp, color: '#F4516C'}}>
-              Cadastre-se
-            </Text>
+            <Text style={styles.signup}>Cadastre-se</Text>
           </View>
         </View>
       </ScrollView>
@@ -88,16 +78,13 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
   },
-  input: {
-    color: '#ffffff',
-    backgroundColor: 'red',
-    flex: 1,
-    padding: 20,
+  inputContainer: {
+    width: '100%',
+    gap: 12,
   },
   forgotPassword: {
+    ...defaultTextApp,
     textAlign: 'right',
-    fontSize: 50,
-    fontFamily: 'Arial',
   },
   button: {
     width: '100%',
@@ -107,11 +94,19 @@ const styles = StyleSheet.create({
     backgroundColor: defaultButtonApp,
     borderRadius: 7,
   },
-  signup: {
+  textButton: {
+    ...defaultTextApp,
+    fontSize: 18,
+  },
+  signupContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 5,
+  },
+  signup: {
+    ...defaultTextApp,
+    color: '#F4516C',
   },
 });
 

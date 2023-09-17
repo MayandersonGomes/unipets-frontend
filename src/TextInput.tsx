@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import {defaultTextApp, defaultInputApp} from './Global';
 
 const StyledTextInput = (props: any): JSX.Element => {
+  const [isSecure, setIsSecure] = useState<boolean | undefined>(props.secure);
   const inputRef = useRef<TextInput | null>(null);
 
   return (
@@ -21,11 +22,18 @@ const StyledTextInput = (props: any): JSX.Element => {
             style={styles.input}
             autoCapitalize={'none'}
             ref={inputRef}
-            secureTextEntry={props.secure}
+            secureTextEntry={isSecure}
           />
         </View>
 
-        <Image source={props.image} style={props.secure ? styles.imagePassword : styles.imageCheck} resizeMode="contain" />
+        <TouchableWithoutFeedback
+          onPress={() => props.secure && setIsSecure(!isSecure)}>
+          <Image
+            source={props.image}
+            style={props.secure ? styles.imagePassword : styles.imageCheck}
+            resizeMode="contain"
+          />
+        </TouchableWithoutFeedback>
       </View>
     </TouchableWithoutFeedback>
   );
