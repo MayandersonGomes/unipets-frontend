@@ -14,23 +14,17 @@ import {
   StyleSheet,
   Image,
   Text,
-  TextStyle,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import image from './assets/images/sets/Unipets.png';
-
-
-export const defaultThemeApp: string = '#171717';
-export const defaultButtonApp: string = '#F4516C';
-export const defaultInputApp: string = '#1F1F1F';
-
-export const defaultTextApp: TextStyle = {
-  fontSize: 15,
-  fontFamily: 'Poppins-Regular',
-  color: '#ffffff',
-};
+import logo from './assets/images/sets/Unipets.png';
+import {
+  defaultThemeApp,
+  defaultButtonApp,
+  defaultInputApp,
+  defaultTextApp,
+} from './Global';
 
 const App = (): JSX.Element => {
   useEffect(() => {
@@ -48,10 +42,9 @@ const App = (): JSX.Element => {
       <StatusBar barStyle={'light-content'} />
       <ScrollView>
         <View style={styles.container}>
-          <Image source={image} style={styles.logo} />
+          <Image source={logo} style={styles.logo} />
 
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.input} />
+          <View style={{width: '100%', gap: 12}}>
             <TextInput style={styles.input} />
 
             <Text style={{...defaultTextApp, textAlign: 'right'}}>Esqueceu sua senha?</Text>
@@ -63,7 +56,7 @@ const App = (): JSX.Element => {
           
           <View style={styles.signup}>
             <Text style={defaultTextApp}>Ainda não tem conta?</Text>
-            <Text style={{...defaultTextApp, color: "#9F132E"}}>Cadastre-se</Text>
+            <Text style={{...defaultTextApp, color: '#F4516C'}}>Cadastre-se</Text>
           </View>
         </View>
       </ScrollView>
@@ -89,14 +82,16 @@ const styles = StyleSheet.create({
     height: 160,
   },
   inputContainer: {
-    width: '100%',
-    gap: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 60,
+    paddingRight: 20,
+    borderRadius: 7,
+    backgroundColor: defaultInputApp,
   },
   input: {
-    height: 60,
-    backgroundColor: defaultInputApp,
-    borderRadius: 7,
-    color: "#ffffff",
+    color: '#ffffff',
+    flex: 1,
     padding: 20,
   },
   forgotPassword: {
@@ -113,11 +108,11 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   signup: {
-    width: "100%",
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 5,
-  }
+  },
 });
 
 export default App;
