@@ -22,6 +22,7 @@ import SplashScreen from 'react-native-splash-screen';
 import logo from './assets/images/sets/Unipets.png';
 import check from './assets/images/check/check.png';
 import eye from './assets/images/eye/eye.png';
+import closedEye from './assets/images/eye/closed-eye.png';
 
 const App = (): JSX.Element => {
   useEffect(() => {
@@ -42,8 +43,8 @@ const App = (): JSX.Element => {
           <Image source={logo} style={styles.logo} />
 
           <View style={styles.inputContainer}>
-            <StyledTextInput label={'E-mail'} image={check} />
-            <StyledTextInput label={'Senha'} image={eye} secure={true} />
+            <StyledTextInput label={'E-mail'} image={{firstImage: check, lastImage: check}} email={true}/>
+            <StyledTextInput label={'Senha'} image={{firstImage: closedEye, lastImage: eye}} secure={true} />
             <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </View>
 

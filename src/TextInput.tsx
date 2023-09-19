@@ -6,12 +6,32 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
+  ImageSourcePropType,
 } from 'react-native';
 import {defaultTextApp, defaultInputApp} from './Global';
 
-const StyledTextInput = (props: any): JSX.Element => {
+interface IStyledTextInput {
+  label: string;
+  image: {
+    firstImage: ImageSourcePropType;
+    lastImage: ImageSourcePropType;
+  };
+  secure?: boolean;
+  email?: boolean;
+}
+
+const StyledTextInput = (props: IStyledTextInput): JSX.Element => {
   const [isSecure, setIsSecure] = useState<boolean | undefined>(props.secure);
+  const [validEmail, setValidEmail] = useState<boolean>(false);
   const inputRef = useRef<TextInput | null>(null);
+
+  const valid = (text: string) => {
+    if (text) {
+      setValidEmail(true);
+      return
+    }
+    setValidEmail(false);
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
@@ -23,16 +43,26 @@ const StyledTextInput = (props: any): JSX.Element => {
             autoCapitalize={'none'}
             ref={inputRef}
             secureTextEntry={isSecure}
+            autoComplete={props.email ? 'email' : 'off'}
+            keyboardType={props.email ? 'email-address' : 'default'}
+            autoCorrect={false}
+            onChangeText={text => valid(text)}
           />
         </View>
 
         <TouchableWithoutFeedback
           onPress={() => props.secure && setIsSecure(!isSecure)}>
-          <Image
-            source={props.image}
-            style={props.secure ? styles.imagePassword : styles.imageCheck}
-            resizeMode="contain"
-          />
+          <View>
+            {(validEmail || props.secure) && (
+              <Image
+                source={
+                  isSecure ? props.image.firstImage : props.image.lastImage
+                }
+                style={props.secure ? styles.imagePassword : styles.imageCheck}
+                resizeMode="contain"
+              />
+            )}
+          </View>
         </TouchableWithoutFeedback>
       </View>
     </TouchableWithoutFeedback>
@@ -58,6 +88,8 @@ const styles = StyleSheet.create({
   },
   input: {
     color: '#ffffff',
+    ...defaultTextApp,
+    fontSize: 16,
   },
   imageCheck: {
     width: 20,
