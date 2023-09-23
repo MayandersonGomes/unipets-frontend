@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,17 +8,13 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  TextInput,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import {
   defaultThemeApp,
   defaultButtonApp,
   defaultTextApp,
-  defaultInputApp,
 } from './Global';
 import StyledTextInput from './TextInput';
 import SplashScreen from 'react-native-splash-screen';
@@ -27,65 +23,19 @@ import greenCheck from './assets/images/check/green-check.png';
 import redCheck from './assets/images/check/red-check.png';
 import eye from './assets/images/eye/eye.png';
 import closedEye from './assets/images/eye/closed-eye.png';
-
-const schema = yup.object({
-  email: yup.string().email().required("O email é obrigatório"),
-  password: yup
-    .string()
-    .test(
-      'special-character',
-      'A senha deve conter pelo menos um caractere especial',
-      (value) => {
-        if (value) {
-          return /[!@#$%^&*(),.?":{}|<>]/.test(value);
-        }
-      }
-    )
-    .test(
-      'uppercase-letter',
-      'A senha deve conter pelo menos uma letra maiúscula',
-      (value) => {
-        if (value) {
-          return /[A-Z]/.test(value);
-        }
-      }
-    )
-    .test(
-      'uppercase-letter',
-      'A senha deve conter pelo menos uma letra minúscula',
-      (value) => {
-        if (value) {
-          return /[a-z]/.test(value);
-        }
-      }
-    )
-    .test(
-      'number',
-      'A senha deve conter pelo menos um número',
-      (value) => {
-        if (value) {
-          return /[0-9]/.test(value);
-        }
-      }
-    )
-    .min(8, 'A senha deve ter pelo menos 8 dígitos')
-    .required("A senha é obrigatória"),
-});
+import {loginScheme} from './validations/login.validation';
 
 const App = (): JSX.Element => {
-  const [isSecure, setIsSecure] = useState(true);
-  const refEmail = useRef<TextInput | null>(null);
-  const refPassword = useRef<TextInput | null>(null);
-
   const {
     control,
     handleSubmit,
     watch,
     formState: {errors},
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(loginScheme),
     defaultValues: {
       email: '',
+      password: '',
     },
     mode: 'all',
   });
@@ -112,90 +62,37 @@ const App = (): JSX.Element => {
           <Image source={logo} style={styles.logo} />
 
           <View style={styles.form}>
-            <TouchableWithoutFeedback
-            onPress={() => refEmail.current?.focus()}>
-              <View style={[styles.inputContainer, errors.email && {borderColor: "#F4516C", borderWidth: 1}]}>
-                <View style={{flex: 1}}>
-                  <Controller
-                    control={control}
-                    name={'email'}
-                    render={({field: {onChange, value}}) => (
-                      <TextInput
-                        ref={refEmail}
-                        style={styles.input}
-                        autoCapitalize={'none'}
-                        autoComplete={'email'}
-                        keyboardType={'email-address'}
-                        autoCorrect={false}
-                        onChangeText={onChange}
-                        value={value}
-                        placeholder={'E-mail'}
-                        placeholderTextColor={"#797979"}
-                      />
-                    )}
-                  />
-                </View>
+            <Controller
+              control={control}
+              name={'email'}
+              render={({field: {onChange, value}}) => (
+                <StyledTextInput
+                  onChange={onChange}
+                  value={value}
+                  watch={watch('email')}
+                  errors={errors}
+                  name={'email'}
+                  images={{firstImage: redCheck, lastImage: greenCheck}}
+                  label={'E-mail'}
+                />
+              )}
+            />
 
-                {watch('email') !== '' &&
-                  (errors.email ? (
-                    <Image
-                      source={redCheck}
-                      style={styles.imageCheck}
-                      resizeMode="contain"
-                    />
-                  ) : (
-                    <Image
-                      source={greenCheck}
-                      style={styles.imageCheck}
-                      resizeMode="contain"
-                    />
-                  ))}
-              </View>
-            </TouchableWithoutFeedback>
-            
-            {errors.email && (
-              <Text style={{color: '#FFFFFF', paddingLeft: 5}}>{errors.email.message}</Text>
-            )}
-
-            <TouchableWithoutFeedback
-              onPress={() => refPassword.current?.focus()}>
-              <View style={[styles.inputContainer, errors.password && {borderColor: "#F4516C", borderWidth: 1}]}>
-                <View style={{flex: 1}}>
-                  <Controller
-                    control={control}
-                    name={'password'}
-                    render={({field: {onChange, value}}) => (
-                      <TextInput
-                        ref={refPassword}
-                        style={styles.input}
-                        autoCapitalize={'none'}
-                        autoCorrect={false}
-                        onChangeText={onChange}
-                        value={value}
-                        secureTextEntry={isSecure}
-                        placeholder={'Senha'}
-                        placeholderTextColor={"#797979"}
-                      />
-                    )}
-                  />
-                </View>
-
-                <TouchableWithoutFeedback
-                  onPress={() => setIsSecure(!isSecure)}>
-                  <View>
-                    <Image
-                      source={isSecure ? closedEye : eye}
-                      style={styles.imagePassword}
-                      resizeMode="contain"
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            </TouchableWithoutFeedback>
-
-            {errors.password && (
-              <Text style={{color: '#FFFFFF', paddingLeft: 5}}>{errors.password.message}</Text>
-            )}
+            <Controller
+              control={control}
+              name={'password'}
+              render={({field: {onChange, value}}) => (
+                <StyledTextInput
+                  onChange={onChange}
+                  value={value}
+                  errors={errors}
+                  name={'password'}
+                  images={{firstImage: closedEye, lastImage: eye}}
+                  label={'Senha'}
+                  secure
+                />
+              )}
+            />
 
             <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </View>
@@ -262,36 +159,6 @@ const styles = StyleSheet.create({
   signup: {
     ...defaultTextApp,
     color: '#F4516C',
-  },
-
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: defaultInputApp,
-    height: 55,
-    paddingVertical: 10,
-    paddingLeft: 15,
-    paddingRight: 20,
-    borderRadius: 7,
-    gap: 20,
-  },
-  label: {
-    ...defaultTextApp,
-    color: '#797979',
-    fontSize: 13,
-  },
-  input: {
-    color: '#ffffff',
-    ...defaultTextApp,
-    fontSize: 15,
-  },
-  imageCheck: {
-    width: 20,
-    height: 20,
-  },
-  imagePassword: {
-    width: 22,
-    height: 22,
   },
 });
 

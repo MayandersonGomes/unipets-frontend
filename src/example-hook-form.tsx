@@ -38,7 +38,6 @@ const App = (): JSX.Element => {
     },
   });
 
-  console.log(watch("username"))
   useEffect(() => {
     SplashScreen.hide();
   }, []);

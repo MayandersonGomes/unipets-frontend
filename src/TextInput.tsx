@@ -6,66 +6,66 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
-  ImageSourcePropType,
 } from 'react-native';
 import {defaultTextApp, defaultInputApp} from './Global';
+import {ITextInput} from './types/interfaces/Input.Interface';
 
-interface IStyledTextInput {
-  label: string;
-  image: {
-    firstImage: ImageSourcePropType;
-    lastImage: ImageSourcePropType;
-  };
-  secure?: boolean;
-  email?: boolean;
-}
-
-const StyledTextInput = (props: IStyledTextInput): JSX.Element => {
+const StyledTextInput = (props: ITextInput): JSX.Element => {
   const [isSecure, setIsSecure] = useState<boolean | undefined>(props.secure);
-  const [validEmail, setValidEmail] = useState<boolean>(false);
-  const inputRef = useRef<TextInput | null>(null);
+  const refInput = useRef<TextInput | null>(null);
 
-  const valid = (text: string) => {
-    if (text) {
-      setValidEmail(true);
-      return
-    }
-    setValidEmail(false);
-  }
+  const isSecureField = props.secure ? isSecure : props.errors[props.name];
+  const imageSource = isSecureField
+    ? props.images.firstImage
+    : props.images.lastImage;
+  const imageStyle = props.secure ? styles.imagePassword : styles.imageCheck;
 
+  const showError = props.errors[props.name] && props.errors[props.name].message !== 'false'
+  
   return (
-    <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
-      <View style={styles.inputContainer}>
-        <View style={{flex: 1}}>
-          <Text style={styles.label}>{props.label}</Text>
-          <TextInput
-            style={styles.input}
-            autoCapitalize={'none'}
-            ref={inputRef}
-            secureTextEntry={isSecure}
-            autoComplete={props.email ? 'email' : 'off'}
-            keyboardType={props.email ? 'email-address' : 'default'}
-            autoCorrect={false}
-            onChangeText={text => valid(text)}
-          />
-        </View>
-
-        <TouchableWithoutFeedback
-          onPress={() => props.secure && setIsSecure(!isSecure)}>
-          <View>
-            {(validEmail || props.secure) && (
-              <Image
-                source={
-                  isSecure ? props.image.firstImage : props.image.lastImage
-                }
-                style={props.secure ? styles.imagePassword : styles.imageCheck}
-                resizeMode="contain"
-              />
-            )}
+    <>
+      <TouchableWithoutFeedback onPress={() => refInput.current?.focus()}>
+        <View
+          style={[
+            styles.inputContainer,
+            props.errors[props.name] && {
+              borderColor: '#F4516C',
+              borderWidth: 1,
+            },
+          ]}>
+          <View style={{flex: 1}}>
+            <TextInput
+              ref={refInput}
+              style={styles.input}
+              autoCapitalize={'none'}
+              autoComplete={'email'}
+              keyboardType={'email-address'}
+              autoCorrect={false}
+              onChangeText={props.onChange}
+              value={props.value}
+              placeholder={props.label}
+              placeholderTextColor={'#797979'}
+              secureTextEntry={isSecure}
+            />
           </View>
-        </TouchableWithoutFeedback>
-      </View>
-    </TouchableWithoutFeedback>
+
+          {props.watch !== '' && (
+            <TouchableWithoutFeedback
+              onPress={() => props.secure && setIsSecure(!isSecure)}>
+              <View>
+                <Image source={imageSource} style={imageStyle} />
+              </View>
+            </TouchableWithoutFeedback>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+        
+      {showError && (
+        <Text style={{color: '#FFFFFF', paddingLeft: 5}}>
+          {props.errors[props.name].message}
+        </Text>
+      )}
+    </>
   );
 };
 
@@ -74,22 +74,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: defaultInputApp,
-    height: 65,
+    height: 55,
     paddingVertical: 10,
     paddingLeft: 15,
     paddingRight: 20,
     borderRadius: 7,
     gap: 20,
   },
-  label: {
-    ...defaultTextApp,
-    color: '#797979',
-    fontSize: 13,
-  },
   input: {
     color: '#ffffff',
     ...defaultTextApp,
-    fontSize: 16,
+    fontSize: 15,
   },
   imageCheck: {
     width: 20,

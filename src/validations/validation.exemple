@@ -1,0 +1,41 @@
+import * as yup from 'yup';
+
+export const loginScheme = yup.object({
+  email: yup.string().email().required('Informe seu e-mail'),
+  password: yup
+    .string()
+    .test(
+      'special-character',
+      'A senha deve conter pelo menos um caractere especial',
+      value => {
+        if (value) {
+          return /[!@#$%^&*(),.?":{}|<>]/.test(value);
+        }
+      },
+    )
+    .test(
+      'uppercase-letter',
+      'A senha deve conter pelo menos uma letra maiúscula',
+      value => {
+        if (value) {
+          return /[A-Z]/.test(value);
+        }
+      },
+    )
+    .test(
+      'uppercase-letter',
+      'A senha deve conter pelo menos uma letra minúscula',
+      value => {
+        if (value) {
+          return /[a-z]/.test(value);
+        }
+      },
+    )
+    .test('number', 'A senha deve conter pelo menos um número', value => {
+      if (value) {
+        return /[0-9]/.test(value);
+      }
+    })
+    .min(8, 'A senha deve ter pelo menos 8 dígitos')
+    .required('A senha é obrigatória'),
+});
