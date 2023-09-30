@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {defaultTextApp, defaultInputApp} from './Global';
-import {ITextInput} from './types/interfaces/Input.Interface';
+import {ITextInput} from '@interfaces/Input.interface';
 
 const StyledTextInput = (props: ITextInput): JSX.Element => {
   const [isSecure, setIsSecure] = useState<boolean | undefined>(props.secure);
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   input: {
-    color: '#ffffff',
     ...defaultTextApp,
     fontSize: 15,
   },

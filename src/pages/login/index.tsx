@@ -8,22 +8,21 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {
-  defaultThemeApp,
-  defaultButtonApp,
-  defaultTextApp,
-} from './Global';
-import StyledTextInput from './TextInput';
-import SplashScreen from 'react-native-splash-screen';
-import logo from './assets/images/sets/Unipets.png';
-import greenCheck from './assets/images/check/green-check.png';
-import redCheck from './assets/images/check/red-check.png';
-import eye from './assets/images/eye/eye.png';
-import closedEye from './assets/images/eye/closed-eye.png';
-import {loginScheme} from './validations/login.validation';
+import axios from 'axios';
+import {defaultThemeApp, defaultButtonApp, defaultTextApp} from '../Global';
+import StyledTextInput from '@pages/TextInput';
+import logo from '@images/sets/Unipets.png';
+import greenCheck from '@images/check/green-check.png';
+import redCheck from '@images/check/red-check.png';
+import eye from '@images/eye/eye.png';
+import closedEye from '@images/eye/closed-eye.png';
+import {loginScheme} from '@validations/login.validation';
+import {createConfig} from '@services/api';
 
 const App = (): JSX.Element => {
   const {
@@ -41,17 +40,23 @@ const App = (): JSX.Element => {
   });
 
   useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-
-  useEffect(() => {
     setTimeout(() => {
       SplashScreen.hide();
     }, 2000);
   }, []);
 
-  const handleSignIn = (data: any) => {
-    console.log('data', data);
+  const signIn = (data: any) => {
+    const config = createConfig('post', 'users/auth', null, data);
+    axios(config).then((response) => {
+      return Alert.alert(response.data.message);
+    }).catch((error) => {
+      const message = error.response.data.message;
+      if (message && error.response.status === 401) {
+        return Alert.alert(message);
+      }
+
+      return Alert.alert("Erro ao realizar login!");
+    });
   };
 
   return (
@@ -99,7 +104,7 @@ const App = (): JSX.Element => {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={handleSubmit(handleSignIn)}>
+            onPress={handleSubmit(signIn)}>
             <Text style={styles.textButton}>Entrar</Text>
           </TouchableOpacity>
 
