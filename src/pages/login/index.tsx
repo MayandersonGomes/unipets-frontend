@@ -14,8 +14,8 @@ import SplashScreen from 'react-native-splash-screen';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import axios from 'axios';
-import {defaultThemeApp, defaultButtonApp, defaultTextApp} from '../Global';
-import StyledTextInput from '@pages/TextInput';
+import {defaultThemeApp, defaultButtonApp, defaultTextApp} from '../../Global';
+import StyledTextInput from '@components/TextInput';
 import logo from '@images/sets/Unipets.png';
 import greenCheck from '@images/check/green-check.png';
 import redCheck from '@images/check/red-check.png';
@@ -24,7 +24,7 @@ import closedEye from '@images/eye/closed-eye.png';
 import {loginScheme} from '@validations/login.validation';
 import {createConfig} from '@services/api';
 
-const App = (): JSX.Element => {
+const Login = (): JSX.Element => {
   const {
     control,
     handleSubmit,
@@ -47,15 +47,15 @@ const App = (): JSX.Element => {
 
   const signIn = (data: any) => {
     const config = createConfig('post', 'users/auth', null, data);
-    axios(config).then((response) => {
+    axios(config).then(response => {
       return Alert.alert(response.data.message);
-    }).catch((error) => {
+    }).catch(error => {
       const message = error.response.data.message;
       if (message && error.response.status === 401) {
         return Alert.alert(message);
       }
 
-      return Alert.alert("Erro ao realizar login!");
+      return Alert.alert('Erro ao realizar login!');
     });
   };
 
@@ -167,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Login;

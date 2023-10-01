@@ -7,7 +7,7 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {defaultTextApp, defaultInputApp} from './Global';
+import {defaultTextApp, defaultInputApp} from '../Global';
 import {ITextInput} from '@interfaces/Input.interface';
 
 const StyledTextInput = (props: ITextInput): JSX.Element => {

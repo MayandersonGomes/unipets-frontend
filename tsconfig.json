@@ -3,10 +3,12 @@
   "compilerOptions": {
     "paths": {
       "@images/*": ["./src/assets/images/*"],
-      "@validations/*": ["./src/validations/*"],
-      "@services/*": ["./src/services/*"],
+      "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
-      "@interfaces/*": ["./src/types/interfaces/*"]
+      "@routes/*": ["./src/routes/*"],
+      "@services/*": ["./src/services/*"],
+      "@interfaces/*": ["./src/types/interfaces/*"],
+      "@validations/*": ["./src/validations/*"],
     }
   }
 }
