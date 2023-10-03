@@ -7,7 +7,7 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {defaultTextApp, defaultInputApp} from '../Global';
+import {defaultTextApp, defaultInputColor} from '@global';
 import {ITextInput} from '@interfaces/Input.interface';
 
 const StyledTextInput = (props: ITextInput): JSX.Element => {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: defaultInputApp,
+    backgroundColor: defaultInputColor,
     height: 55,
     paddingVertical: 10,
     paddingLeft: 15,

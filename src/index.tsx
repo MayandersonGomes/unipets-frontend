@@ -1,11 +1,11 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import Routes from '@routes/routes'
+import MainRoutes from '@routes/routes'
 
 const App = (): JSX.Element => {
   return (
     <NavigationContainer>
-        <Routes />
+        <MainRoutes />
     </NavigationContainer>
   );
 };

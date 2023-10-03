@@ -15,6 +15,7 @@ module.exports = {
         alias: {
           '@images': './src/assets/images',
           '@components': './src/components',
+          '@global': './src/global',
           '@pages': './src/pages',
           '@routes': './src/routes',
           '@services': './src/services',

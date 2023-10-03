@@ -1,8 +1,8 @@
 import {TextStyle} from 'react-native';
 
-export const defaultThemeApp: string = '#171717';
-export const defaultButtonApp: string = '#F4516C';
-export const defaultInputApp: string = '#1F1F1F';
+export const defaultAppTheme: string = '#171717';
+export const defaultButtonColor: string = '#F4516C';
+export const defaultInputColor: string = '#1F1F1F';
 
 export const defaultTextApp: TextStyle = {
   fontSize: 15,

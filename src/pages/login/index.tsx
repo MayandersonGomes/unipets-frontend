@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -14,7 +14,7 @@ import SplashScreen from 'react-native-splash-screen';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import axios from 'axios';
-import {defaultThemeApp, defaultButtonApp, defaultTextApp} from '../../Global';
+import {defaultAppTheme, defaultTextApp} from '@global';
 import StyledTextInput from '@components/TextInput';
 import logo from '@images/sets/Unipets.png';
 import greenCheck from '@images/check/green-check.png';
@@ -23,8 +23,11 @@ import eye from '@images/eye/eye.png';
 import closedEye from '@images/eye/closed-eye.png';
 import {loginScheme} from '@validations/login.validation';
 import {createConfig} from '@services/api';
+import StyledButton from '@components/Button';
 
-const Login = (): JSX.Element => {
+const Login = ({navigation}: any): JSX.Element => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const {
     control,
     handleSubmit,
@@ -46,17 +49,19 @@ const Login = (): JSX.Element => {
   }, []);
 
   const signIn = (data: any) => {
+    setIsLoading(true);
     const config = createConfig('post', 'users/auth', null, data);
-    axios(config).then(response => {
-      return Alert.alert(response.data.message);
-    }).catch(error => {
-      const message = error.response.data.message;
-      if (message && error.response.status === 401) {
-        return Alert.alert(message);
-      }
-
-      return Alert.alert('Erro ao realizar login!');
-    });
+    axios(config).then(() => {
+        navigation.navigate('Home');
+      }).catch(error => {
+        const message = error.response.data.message;
+        if (message && error.response.status === 401) {
+          return Alert.alert(message);
+        }
+        return Alert.alert('Erro ao realizar login!');
+      }).finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -102,15 +107,13 @@ const Login = (): JSX.Element => {
             <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleSubmit(signIn)}>
-            <Text style={styles.textButton}>Entrar</Text>
-          </TouchableOpacity>
+          <StyledButton title={'Entrar'} handle={handleSubmit} submit={signIn} isLoading={isLoading} />
 
           <View style={styles.signupContainer}>
             <Text style={defaultTextApp}>Ainda não tem conta?</Text>
-            <Text style={styles.signup}>Cadastre-se</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Register') }>
+              <Text style={styles.signup}>Cadastre-se</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -121,7 +124,7 @@ const Login = (): JSX.Element => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: defaultThemeApp,
+    backgroundColor: defaultAppTheme,
   },
   container: {
     flex: 1,
@@ -142,18 +145,6 @@ const styles = StyleSheet.create({
   forgotPassword: {
     ...defaultTextApp,
     textAlign: 'right',
-  },
-  button: {
-    width: '100%',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: defaultButtonApp,
-    borderRadius: 7,
-  },
-  textButton: {
-    ...defaultTextApp,
-    fontSize: 18,
   },
   signupContainer: {
     width: '100%',
