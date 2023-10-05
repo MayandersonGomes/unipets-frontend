@@ -10,25 +10,40 @@ import {
 import {defaultTextApp, defaultInputColor} from '@global';
 import {ITextInput} from '@interfaces/Input.interface';
 
-const StyledTextInput = (props: ITextInput): JSX.Element => {
-  const [isSecure, setIsSecure] = useState<boolean | undefined>(props.secure);
+const StyledTextInput = ({
+  secure,
+  errors,
+  images,
+  onChange,
+  value,
+  label,
+  watch,
+}: ITextInput): JSX.Element => {
+  const [isSecure, setIsSecure] = useState<boolean | undefined>(secure);
   const refInput = useRef<TextInput | null>(null);
 
-  const isSecureField = props.secure ? isSecure : props.errors[props.name];
-  const imageSource = isSecureField
-    ? props.images.firstImage
-    : props.images.lastImage;
-  const imageStyle = props.secure ? styles.imagePassword : styles.imageCheck;
+  const error = errors;
+  const message = error?.message;
 
-  const showError = props.errors[props.name] && props.errors[props.name].message !== 'false'
-  
+  const isSecureField = secure ? isSecure : error;
+  const imageSource = isSecureField ? images?.firstImage : images?.lastImage;
+  const imageStyle = secure ? styles.imagePassword : styles.imageCheck;
+
+  const showError = error && message !== 'false';
+
+  const onChangeText = (text: any) => {
+    const digit = secure ? '' : ' '
+    const cleanedText = text.replace(/ +/g, digit)
+    onChange(cleanedText);
+  };
+
   return (
     <>
       <TouchableWithoutFeedback onPress={() => refInput.current?.focus()}>
         <View
           style={[
             styles.inputContainer,
-            props.errors[props.name] && {
+            error && {
               borderColor: '#F4516C',
               borderWidth: 1,
             },
@@ -41,17 +56,17 @@ const StyledTextInput = (props: ITextInput): JSX.Element => {
               autoComplete={'email'}
               keyboardType={'email-address'}
               autoCorrect={false}
-              onChangeText={props.onChange}
-              value={props.value}
-              placeholder={props.label}
+              onChangeText={onChangeText}
+              value={value}
+              placeholder={label}
               placeholderTextColor={'#797979'}
               secureTextEntry={isSecure}
             />
           </View>
-
-          {props.watch !== '' && (
+          
+          {imageSource && watch !== '' && (
             <TouchableWithoutFeedback
-              onPress={() => props.secure && setIsSecure(!isSecure)}>
+              onPress={() => secure && setIsSecure(!isSecure)}>
               <View>
                 <Image source={imageSource} style={imageStyle} />
               </View>
@@ -59,11 +74,9 @@ const StyledTextInput = (props: ITextInput): JSX.Element => {
           )}
         </View>
       </TouchableWithoutFeedback>
-        
+
       {showError && (
-        <Text style={{color: '#FFFFFF', paddingLeft: 5}}>
-          {props.errors[props.name].message}
-        </Text>
+        <Text style={{color: '#FFFFFF', paddingLeft: 5}}>{message}</Text>
       )}
     </>
   );

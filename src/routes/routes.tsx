@@ -18,7 +18,7 @@ const HomeRoutes = () => {
         fontWeight: "400",
       },
     }}>
-      <Tab.Screen name='HomeScreen' component={Home} options={{title: 'Home'}} />
+      <Tab.Screen name='Home' component={Home} options={{title: 'Home'}} />
       <Tab.Screen name='Profile' component={Profile} options={{title: 'Perfil'}} />
     </Tab.Navigator>
   );
@@ -41,7 +41,7 @@ const MainRoutes = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen name='Register' component={Register} options={{title: 'Cadastro'}} />
-      <Stack.Screen name='Home' component={HomeRoutes} options={{headerShown: false}} />
+      <Stack.Screen name='Initial' component={HomeRoutes} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };

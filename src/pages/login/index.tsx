@@ -13,20 +13,28 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {loginScheme} from '@validations/login.validation';
 import axios from 'axios';
-import {defaultAppTheme, defaultTextApp} from '@global';
+import {createConfig} from '@services/api';
+import {defaultAppTheme, defaultAlignment, defaultTextApp} from '@global';
 import StyledTextInput from '@components/TextInput';
+import DynamicFields from '@components/DynamicFields';
+import StyledButton from '@components/Button';
 import logo from '@images/sets/Unipets.png';
+import {IFields} from '@interfaces/DynamicFields.interface';
 import greenCheck from '@images/check/green-check.png';
 import redCheck from '@images/check/red-check.png';
 import eye from '@images/eye/eye.png';
 import closedEye from '@images/eye/closed-eye.png';
-import {loginScheme} from '@validations/login.validation';
-import {createConfig} from '@services/api';
-import StyledButton from '@components/Button';
 
 const Login = ({navigation}: any): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000);
+  }, []);
 
   const {
     control,
@@ -35,34 +43,48 @@ const Login = ({navigation}: any): JSX.Element => {
     formState: {errors},
   } = useForm({
     resolver: yupResolver(loginScheme),
+    mode: 'all',
     defaultValues: {
       email: '',
       password: '',
     },
-    mode: 'all',
   });
-
-  useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hide();
-    }, 2000);
-  }, []);
 
   const signIn = (data: any) => {
     setIsLoading(true);
     const config = createConfig('post', 'users/auth', null, data);
-    axios(config).then(() => {
-        navigation.navigate('Home');
-      }).catch(error => {
-        const message = error.response.data.message;
+    axios(config)
+      .then(() => {
+        navigation.navigate('Initial');
+      })
+      .catch(error => {
+        const message = error.response?.data.message;
         if (message && error.response.status === 401) {
           return Alert.alert(message);
         }
         return Alert.alert('Erro ao realizar login!');
-      }).finally(() => {
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   };
+
+  const fields: IFields[] = [
+    {
+      name: 'email',
+      label: 'E-mail',
+      firstImage: redCheck,
+      lastImage: greenCheck,
+      watch: watch,
+    },
+    {
+      name: 'password',
+      label: 'Senha',
+      firstImage: closedEye,
+      lastImage: eye,
+      secure: true,
+    },
+  ];
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -72,46 +94,25 @@ const Login = ({navigation}: any): JSX.Element => {
           <Image source={logo} style={styles.logo} />
 
           <View style={styles.form}>
-            <Controller
+            <DynamicFields
               control={control}
-              name={'email'}
-              render={({field: {onChange, value}}) => (
-                <StyledTextInput
-                  onChange={onChange}
-                  value={value}
-                  watch={watch('email')}
-                  errors={errors}
-                  name={'email'}
-                  images={{firstImage: redCheck, lastImage: greenCheck}}
-                  label={'E-mail'}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name={'password'}
-              render={({field: {onChange, value}}) => (
-                <StyledTextInput
-                  onChange={onChange}
-                  value={value}
-                  errors={errors}
-                  name={'password'}
-                  images={{firstImage: closedEye, lastImage: eye}}
-                  label={'Senha'}
-                  secure
-                />
-              )}
+              errors={errors}
+              fields={fields}
             />
 
             <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </View>
 
-          <StyledButton title={'Entrar'} handle={handleSubmit} submit={signIn} isLoading={isLoading} />
+          <StyledButton
+            title={'Entrar'}
+            handle={handleSubmit}
+            submit={signIn}
+            isLoading={isLoading}
+          />
 
           <View style={styles.signupContainer}>
             <Text style={defaultTextApp}>Ainda não tem conta?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register') }>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={styles.signup}>Cadastre-se</Text>
             </TouchableOpacity>
           </View>
@@ -127,9 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: defaultAppTheme,
   },
   container: {
-    flex: 1,
-    alignItems: 'center',
-    marginHorizontal: 20,
+    ...defaultAlignment,
     marginTop: 100,
     marginBottom: 30,
     gap: 50,
