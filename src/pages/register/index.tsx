@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -25,14 +26,20 @@ const Register = (): JSX.Element => {
   const {
     control,
     handleSubmit,
+    watch,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(registerScheme),
     mode: 'all',
+    defaultValues: {
+      password: ''
+    }
   });
 
   const signup = () => {
-    console.log('CRIAR USUARIO');
+    setTimeout(() => {
+      Alert.alert("RETORNO DA API")
+    }, 2000)
   };
 
   const fields: IFields[] = [
@@ -41,7 +48,7 @@ const Register = (): JSX.Element => {
     {name: 'birthday', label: 'Data de nascimento'},
     {name: 'email', label: 'Email'},
     {name: 'confirmEmail', label: 'Confirmar email'},
-    {name: 'password', label: 'Senha'},
+    {name: 'password', label: 'Senha', secure: true, help: true, watch: watch},
     {name: 'confirmPassword', label: 'Confirmar senha'},
   ];
 
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '100%',
-    gap: 12,
+    gap: 30,
   },
   termsContainer: {
     gap: 7,

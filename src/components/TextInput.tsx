@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import {defaultTextApp, defaultInputColor} from '@global';
 import {ITextInput} from '@interfaces/Input.interface';
-
+import DynamicErrors from './DynamicErrors';
+import { IErros } from '@interfaces/DynamicErrors.interface';
 const StyledTextInput = ({
   secure,
   errors,
@@ -17,11 +18,11 @@ const StyledTextInput = ({
   onChange,
   value,
   label,
+  help,
   watch,
 }: ITextInput): JSX.Element => {
   const [isSecure, setIsSecure] = useState<boolean | undefined>(secure);
   const refInput = useRef<TextInput | null>(null);
-
   const error = errors;
   const message = error?.message;
 
@@ -32,10 +33,17 @@ const StyledTextInput = ({
   const showError = error && message !== 'false';
 
   const onChangeText = (text: any) => {
-    const digit = secure ? '' : ' '
-    const cleanedText = text.replace(/ +/g, digit)
+    const digit = secure ? '' : ' ';
+    const cleanedText = text.replace(/ +/g, digit);
     onChange(cleanedText);
   };
+
+  const fields: IErros[] = [
+    {title: 'character', label: 'Caractere especial'},
+    {title: 'letter', label: 'Letras maiúsculas e minúsculas'},
+    {title: 'number', label: 'Número'},
+    {title: 'min', label: '8 caracteres'},
+  ];
 
   return (
     <>
@@ -53,8 +61,6 @@ const StyledTextInput = ({
               ref={refInput}
               style={styles.input}
               autoCapitalize={'none'}
-              autoComplete={'email'}
-              keyboardType={'email-address'}
               autoCorrect={false}
               onChangeText={onChangeText}
               value={value}
@@ -63,7 +69,7 @@ const StyledTextInput = ({
               secureTextEntry={isSecure}
             />
           </View>
-          
+
           {imageSource && watch !== '' && (
             <TouchableWithoutFeedback
               onPress={() => secure && setIsSecure(!isSecure)}>
@@ -74,6 +80,16 @@ const StyledTextInput = ({
           )}
         </View>
       </TouchableWithoutFeedback>
+
+      {help && (
+        <View style={{gap: 5}}>
+          <DynamicErrors
+            fields={fields}
+            errors={error}
+          />
+
+        </View>
+      )}
 
       {showError && (
         <Text style={{color: '#FFFFFF', paddingLeft: 5}}>{message}</Text>

@@ -15,3 +15,5 @@ export const defaultTextApp: TextStyle = {
   fontFamily: 'Poppins-Medium',
   color: '#ffffff',
 };
+
+export const trimString = (value: string) => value.trim();

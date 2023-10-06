@@ -1,14 +1,15 @@
 import React from 'react';
+import {View} from 'react-native';
 import StyledTextInput from './TextInput';
 import {Controller} from 'react-hook-form';
 import {IDynamicFields} from '@interfaces/DynamicFields.interface';
 
-const DynamicFields = ({control, errors, fields}: IDynamicFields) => {
+const DynamicFields = ({control, errors, fields}: IDynamicFields): JSX.Element => {
   return (
-    <>
-      {fields.map((field: any) => (
+    <View style={{gap: 12}}>
+      {fields.map((field, index) => (
         <Controller
-          key={field.name}
+          key={index}
           control={control}
           name={field.name}
           render={({field: {onChange, value}}) => (
@@ -23,11 +24,12 @@ const DynamicFields = ({control, errors, fields}: IDynamicFields) => {
                 lastImage: field.lastImage,
               }}
               secure={field.secure}
+              help={field.help}
             />
           )}
         />
       ))}
-    </>
+    </View>
   );
 };
 

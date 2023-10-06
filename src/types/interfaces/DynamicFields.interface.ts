@@ -6,6 +6,7 @@ export interface IFields {
     firstImage?: ImageSourcePropType;
     lastImage?: ImageSourcePropType;
     secure?: boolean;
+    help?: boolean;
     watch?: (field: string) => string;
 }
 
