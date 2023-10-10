@@ -3,7 +3,7 @@ import { IAlignment } from '@interfaces/global.interface'
 
 export const defaultAppTheme: string = '#171717';
 export const defaultButtonColor: string = '#F4516C';
-export const defaultInputColor: string = '#1F1F1F';
+export const defaultInputColor: string = '#474444';
 
 export const defaultAlignment: IAlignment = {
   alignItems: 'center',
@@ -17,3 +17,5 @@ export const defaultTextApp: TextStyle = {
 };
 
 export const trimString = (value: string) => value.trim();
+
+export const requiredField = "Não se esqueça de preencher este campo"

@@ -16,8 +16,10 @@ import {registerScheme} from '@validations/register.validation';
 import {defaultAppTheme, defaultAlignment, defaultTextApp} from '@global';
 import DynamicFields from '@components/DynamicFields';
 import StyledButton from '@components/Button';
-import CheckBox from '@images/check/checkbox.png';
 import {IFields} from '@interfaces/DynamicFields.interface';
+import CheckBox from '@images/check/checkbox.png';
+import closedEye from '@images/eye/closed-eye.png';
+import eye from '@images/eye/eye.png';
 
 const Register = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -32,24 +34,24 @@ const Register = (): JSX.Element => {
     resolver: yupResolver(registerScheme),
     mode: 'all',
     defaultValues: {
-      password: ''
-    }
+      password: '',
+    },
   });
 
   const signup = () => {
     setTimeout(() => {
-      Alert.alert("RETORNO DA API")
-    }, 2000)
+      Alert.alert('RETORNO DA API');
+    }, 2000);
   };
 
   const fields: IFields[] = [
-    {name: 'name', label: 'Nome'},
-    {name: 'cpf', label: 'CPF'},
-    {name: 'birthday', label: 'Data de nascimento'},
-    {name: 'email', label: 'Email'},
-    {name: 'confirmEmail', label: 'Confirmar email'},
-    {name: 'password', label: 'Senha', secure: true, help: true, watch: watch},
-    {name: 'confirmPassword', label: 'Confirmar senha'},
+    {name: 'name', label: 'Nome*'},
+    {name: 'cpf', label: 'CPF*'},
+    {name: 'birthday', label: 'Data de nascimento*'},
+    {name: 'email', label: 'Email*'},
+    {name: 'confirmEmail', label: 'Confirmar email*'},
+    {name: 'password', label: 'Senha*', firstImage: closedEye, lastImage: eye, secure: true, help: true, watch: watch},
+    {name: 'confirmPassword', label: 'Confirmar senha*'},
   ];
 
   return (
@@ -107,8 +109,7 @@ const styles = StyleSheet.create({
   },
   container: {
     ...defaultAlignment,
-    marginTop: 20,
-    marginBottom: 30,
+    marginVertical: 30,
     gap: 10,
   },
   form: {

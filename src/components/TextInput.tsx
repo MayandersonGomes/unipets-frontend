@@ -6,11 +6,12 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
+  Animated,
 } from 'react-native';
-import {defaultTextApp, defaultInputColor} from '@global';
+import {defaultTextApp, defaultInputColor, defaultAppTheme} from '@global';
 import {ITextInput} from '@interfaces/Input.interface';
 import DynamicErrors from './DynamicErrors';
-import { IErros } from '@interfaces/DynamicErrors.interface';
+import {IErros} from '@interfaces/DynamicErrors.interface';
 const StyledTextInput = ({
   secure,
   errors,
@@ -21,6 +22,12 @@ const StyledTextInput = ({
   help,
   watch,
 }: ITextInput): JSX.Element => {
+  const [placeholderAnimated, setPlaceholderAnim] = useState(
+    new Animated.Value(0),
+  );
+  const [placeholderSize, setPlaceholderSize] = useState(15);
+  const [placeholderPadding, setPlaceholderPadding] = useState(0);
+
   const [isSecure, setIsSecure] = useState<boolean | undefined>(secure);
   const refInput = useRef<TextInput | null>(null);
   const error = errors;
@@ -45,18 +52,42 @@ const StyledTextInput = ({
     {title: 'min', label: '8 caracteres'},
   ];
 
+  const handleFocus = () => {
+    if (!value) {
+      setPlaceholderSize(13);
+      setPlaceholderPadding(5);
+      Animated.timing(placeholderAnimated, {
+        toValue: -25,
+        duration: 120,
+        useNativeDriver: false,
+      }).start();
+    }
+  };
+
+  const handleBlur = () => {
+    if (!value) {
+      setPlaceholderSize(15);
+      setPlaceholderPadding(0);
+      Animated.timing(placeholderAnimated, {
+        toValue: 0,
+        duration: 120,
+        useNativeDriver: false,
+      }).start();
+    }
+  };
+
   return (
-    <>
+    <View style={{gap: 10}}>
       <TouchableWithoutFeedback onPress={() => refInput.current?.focus()}>
         <View
           style={[
-            styles.inputContainer,
+            styles.mainContainer,
             error && {
               borderColor: '#F4516C',
               borderWidth: 1,
             },
           ]}>
-          <View style={{flex: 1}}>
+          <View style={styles.inputContainer}>
             <TextInput
               ref={refInput}
               style={styles.input}
@@ -64,10 +95,22 @@ const StyledTextInput = ({
               autoCorrect={false}
               onChangeText={onChangeText}
               value={value}
-              placeholder={label}
-              placeholderTextColor={'#797979'}
               secureTextEntry={isSecure}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
+
+            <Animated.Text
+              style={[
+                styles.placeholder,
+                {
+                  top: placeholderAnimated,
+                  fontSize: placeholderSize,
+                  paddingHorizontal: placeholderPadding,
+                },
+              ]}>
+              {label}
+            </Animated.Text>
           </View>
 
           {imageSource && watch !== '' && (
@@ -81,28 +124,25 @@ const StyledTextInput = ({
         </View>
       </TouchableWithoutFeedback>
 
-      {help && (
-        <View style={{gap: 5}}>
-          <DynamicErrors
-            fields={fields}
-            errors={error}
-          />
-
-        </View>
-      )}
-
-      {showError && (
+      {showError && message.standardError !== false && (
         <Text style={{color: '#FFFFFF', paddingLeft: 5}}>{message}</Text>
       )}
-    </>
+
+      {help && (
+        <View style={{gap: 5}}>
+          <DynamicErrors fields={fields} errors={error} />
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  mainContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: defaultInputColor,
+    borderColor: defaultInputColor,
+    borderWidth: 2,
     height: 55,
     paddingVertical: 10,
     paddingLeft: 15,
@@ -110,9 +150,21 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     gap: 20,
   },
+  inputContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   input: {
+    flex: 1,
     ...defaultTextApp,
     fontSize: 15,
+  },
+  placeholder: {
+    position: 'absolute',
+    ...defaultTextApp,
+    color: '#797979',
+    backgroundColor: defaultAppTheme,
   },
   imageCheck: {
     width: 20,

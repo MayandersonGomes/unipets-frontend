@@ -72,14 +72,14 @@ const Login = ({navigation}: any): JSX.Element => {
   const fields: IFields[] = [
     {
       name: 'email',
-      label: 'E-mail',
+      label: 'E-mail*',
       firstImage: redCheck,
       lastImage: greenCheck,
       watch: watch,
     },
     {
       name: 'password',
-      label: 'Senha',
+      label: 'Senha*',
       firstImage: closedEye,
       lastImage: eye,
       secure: true,
@@ -92,13 +92,8 @@ const Login = ({navigation}: any): JSX.Element => {
       <ScrollView>
         <View style={styles.container}>
           <Image source={logo} style={styles.logo} />
-
           <View style={styles.form}>
-            <DynamicFields
-              control={control}
-              errors={errors}
-              fields={fields}
-            />
+            <DynamicFields control={control} errors={errors} fields={fields} />
 
             <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </View>
@@ -139,7 +134,7 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '100%',
-    gap: 12,
+    gap: 25,
   },
   forgotPassword: {
     ...defaultTextApp,

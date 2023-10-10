@@ -15,7 +15,7 @@ const DynamicErrors = ({fields, errors}: IDynamicErrors): JSX.Element => {
         style={styles.imageContainer}>
           <Image
             source={!errors?.message[field.title] ? RedCheck : GreenCheck}
-            style={{width: 13, height: 13 }}
+            style={{width: 12, height: 12 }}
           />
 
           <Text style={styles.label}>{field.label}</Text>
@@ -33,11 +33,12 @@ const styles = StyleSheet.create({
   },
   title: {
     ...defaultTextApp,
+    fontSize: 14,
     marginBottom: 7,
   },
   label: {
     ...defaultTextApp,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'Poppins-Regular'
   },
 });

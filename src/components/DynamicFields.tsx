@@ -6,7 +6,7 @@ import {IDynamicFields} from '@interfaces/DynamicFields.interface';
 
 const DynamicFields = ({control, errors, fields}: IDynamicFields): JSX.Element => {
   return (
-    <View style={{gap: 12}}>
+    <View style={{gap: 25}}>
       {fields.map((field, index) => (
         <Controller
           key={index}
