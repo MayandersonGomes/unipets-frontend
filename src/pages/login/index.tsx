@@ -26,6 +26,7 @@ import greenCheck from '@images/check/green-check.png';
 import redCheck from '@images/check/red-check.png';
 import eye from '@images/eye/eye.png';
 import closedEye from '@images/eye/closed-eye.png';
+import {showMessage} from 'react-native-flash-message';
 
 const Login = ({navigation}: any): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,11 +59,19 @@ const Login = ({navigation}: any): JSX.Element => {
         navigation.navigate('Initial');
       })
       .catch(error => {
-        const message = error.response?.data.message;
-        if (message && error.response.status === 401) {
-          return Alert.alert(message);
-        }
-        return Alert.alert('Erro ao realizar login!');
+        const message = error.response?.data.message || 'Erro ao realizar login!';
+        showMessage({
+          message: message,
+          type: 'danger',
+          duration: 2500,
+          style: {
+            alignItems: 'center',
+          },
+          titleStyle: {
+            ...defaultTextApp,
+            fontSize: 17,
+          },
+        });
       })
       .finally(() => {
         setIsLoading(false);
