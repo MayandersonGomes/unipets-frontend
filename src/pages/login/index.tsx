@@ -85,6 +85,8 @@ const Login = ({navigation}: any): JSX.Element => {
       firstImage: redCheck,
       lastImage: greenCheck,
       watch: watch,
+      capitalize: 'none',
+      keyboardType: 'email-address'
     },
     {
       name: 'password',
@@ -92,13 +94,14 @@ const Login = ({navigation}: any): JSX.Element => {
       firstImage: closedEye,
       lastImage: eye,
       secure: true,
+      capitalize: 'none',
     },
   ];
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle={'light-content'} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <Image source={logo} style={styles.logo} />
           <View style={styles.form}>

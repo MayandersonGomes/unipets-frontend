@@ -12,7 +12,9 @@ import {defaultTextApp, defaultInputColor, defaultAppTheme} from '@global';
 import {ITextInput} from '@interfaces/Input.interface';
 import DynamicErrors from './DynamicErrors';
 import {IErros} from '@interfaces/DynamicErrors.interface';
-const StyledTextInput = ({
+import MaskInput from 'react-native-mask-input';
+
+const StyledTextInput: React.FC<ITextInput> = ({
   secure,
   errors,
   images,
@@ -21,7 +23,10 @@ const StyledTextInput = ({
   label,
   help,
   watch,
-}: ITextInput): JSX.Element => {
+  capitalize,
+  mask,
+  keyboardType
+}): JSX.Element => {
   const [placeholderAnimated, setPlaceholderAnim] = useState(
     new Animated.Value(0),
   );
@@ -88,11 +93,14 @@ const StyledTextInput = ({
             },
           ]}>
           <View style={styles.inputContainer}>
-            <TextInput
+            <MaskInput
+              mask={mask}
+              placeholder={undefined}
               ref={refInput}
               style={styles.input}
-              autoCapitalize={'none'}
+              autoCapitalize={capitalize}
               autoCorrect={false}
+              keyboardType={keyboardType}
               onChangeText={onChangeText}
               value={value}
               secureTextEntry={isSecure}

@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { trimString, requiredField } from '@global';
+import { parse, isValid } from 'date-fns';
 
 export const registerScheme = yup.object({
   name: yup
@@ -14,7 +15,15 @@ export const registerScheme = yup.object({
   birthday: yup
     .string()
     .transform(trimString)
-    .required(requiredField),
+    .required(requiredField)
+    .test(
+      'valid-date',
+      'Informe uma data de nascimento válida',
+      (value) => {
+        const date = parse(value, 'dd/MM/yyyy', new Date());
+        return isValid(date);
+      }
+    ),
   email: yup
     .string()
     .transform(trimString)
@@ -24,7 +33,8 @@ export const registerScheme = yup.object({
     .string()
     .transform(trimString)
     .email('Informe um email válido')
-    .required(requiredField),
+    .required(requiredField)
+    .oneOf([yup.ref('email')], 'Os endereços de e-mail devem ser idênticos.'),
   password: yup
     .string()
     .transform(trimString)
@@ -47,5 +57,6 @@ export const registerScheme = yup.object({
   confirmPassword: yup
     .string()
     .transform(trimString)
-    .required(requiredField),
+    .required(requiredField)
+    .oneOf([yup.ref('password')], 'As senhas devem ser idênticas.'),
 });

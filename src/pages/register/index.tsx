@@ -28,6 +28,7 @@ import eye from '@images/eye/eye.png';
 import Camera from '@images/camera/camera.png';
 import DefaultPhoto from '@images/default-photo.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {Masks} from 'react-native-mask-input';
 
 const Register = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,11 +55,31 @@ const Register = (): JSX.Element => {
   };
 
   const fields: IFields[] = [
-    {name: 'name', label: 'Nome*'},
-    {name: 'cpf', label: 'CPF*'},
-    {name: 'birthday', label: 'Data de nascimento*'},
-    {name: 'email', label: 'Email*'},
-    {name: 'confirmEmail', label: 'Confirmar email*'},
+    {name: 'name', label: 'Nome*', capitalize: 'words'},
+    {
+      name: 'cpf',
+      label: 'CPF*',
+      mask: Masks.BRL_CPF,
+      keyboardType: 'number-pad',
+    },
+    {
+      name: 'birthday',
+      label: 'Data de nascimento*',
+      mask: Masks.DATE_DDMMYYYY,
+      keyboardType: 'number-pad',
+    },
+    {
+      name: 'email',
+      label: 'Email*',
+      capitalize: 'none',
+      keyboardType: 'email-address',
+    },
+    {
+      name: 'confirmEmail',
+      label: 'Confirmar email*',
+      capitalize: 'none',
+      keyboardType: 'email-address',
+    },
     {
       name: 'password',
       label: 'Senha*',
@@ -67,8 +88,9 @@ const Register = (): JSX.Element => {
       secure: true,
       help: true,
       watch: watch,
+      capitalize: 'none',
     },
-    {name: 'confirmPassword', label: 'Confirmar senha*'},
+    {name: 'confirmPassword', label: 'Confirmar senha*', capitalize: 'none'},
   ];
 
   const pickImageFromGalery = async () => {
@@ -122,50 +144,27 @@ const Register = (): JSX.Element => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle={'dark-content'} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.form}>
-            <TouchableOpacity
-              onPress={handleImageUser}
-              style={{alignItems: 'center'}}>
-              <View
-                style={{
-                  width: 150,
-                  height: 150,
-                  borderRadius: 100,
-                  borderWidth: 2,
-                  borderColor: defaultInputColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+            <View style={{alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={handleImageUser}
+                style={styles.imageContainer}>
                 <Image
-                  style={{width: '100%', height: '100%', borderRadius: 100}}
+                  style={styles.image}
                   source={typeof image === 'string' ? {uri: image} : image}
                 />
 
-                <View
-                  style={{
-                    backgroundColor: 'gray',
-                    width: 45,
-                    height: 45,
-                    borderRadius: 100,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'absolute',
-                    right: 0,
-                    bottom: 0,
-                  }}>
+                <View style={styles.cameraContainer}>
                   <Image
-                    style={{
-                      width: 25,
-                      height: 18,
-                    }}
+                    style={styles.camera}
                     resizeMode="contain"
                     source={Camera}
                   />
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
 
             <DynamicFields control={control} errors={errors} fields={fields} />
 
@@ -222,6 +221,36 @@ const styles = StyleSheet.create({
   form: {
     width: '100%',
     gap: 30,
+  },
+  imageContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: defaultInputColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 100,
+  },
+  cameraContainer: {
+    backgroundColor: 'gray',
+    width: 45,
+    height: 45,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+  },
+  camera: {
+    width: 25,
+    height: 18,
   },
   termsContainer: {
     gap: 7,

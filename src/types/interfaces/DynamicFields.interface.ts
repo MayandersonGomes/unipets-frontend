@@ -1,12 +1,10 @@
 import { ImageSourcePropType } from "react-native";
+import { IBaseInputProps } from "./Input.interface";
 
-export interface IFields {
+export interface IFields extends IBaseInputProps {
     name: string;
-    label: string;
     firstImage?: ImageSourcePropType;
     lastImage?: ImageSourcePropType;
-    secure?: boolean;
-    help?: boolean;
     watch?: (field: string) => string;
 }
 
