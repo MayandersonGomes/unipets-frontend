@@ -1,20 +1,21 @@
 import * as yup from 'yup';
-import { trimString, requiredField } from '@global';
+import { requiredField } from '@global';
 import { parse, isValid } from 'date-fns';
+import { isStrongPassword } from './password.validation';
 
 export const registerScheme = yup.object({
   name: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField)
     .min(3, 'Nome deve conter no mínimo 3 caracteres.'),
   cpf: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField),
   birthday: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField)
     .test(
       'valid-date',
@@ -26,37 +27,34 @@ export const registerScheme = yup.object({
     ),
   email: yup
     .string()
-    .transform(trimString)
+    .trim()
     .email('Informe um email válido')
     .required(requiredField),
   confirmEmail: yup
     .string()
-    .transform(trimString)
+    .trim()
     .email('Informe um email válido')
     .required(requiredField)
     .oneOf([yup.ref('email')], 'Os endereços de e-mail devem ser idênticos.'),
   password: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField)
-    .test({
-      name: 'custom-validation',
-      skipAbsent: true,
-      test(value: string, ctx: any) {
-        return ctx.createError({
-          message: {
-            standardError: false,
-            character: /[!@#$%^&*(),.?":{}|<>]/.test(value),
-            letter: /[A-Z]/.test(value) && /[a-z]/.test(value),
-            number: /[0-9]/.test(value),
-            min: value.length >= 8
-          }
-        })
+    .test(
+      'custom-validation',
+      'false',
+      (value) => {
+        const { character, letter, number, min } = isStrongPassword(value);
+        return character && letter && number && min;
       }
-    }),
+    ),
   confirmPassword: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField)
     .oneOf([yup.ref('password')], 'As senhas devem ser idênticas.'),
+  termsOfUse: yup
+    .boolean()
+    .required(requiredField)
+    .oneOf([true], 'Os termos de uso devem ser aceitos'),
 });

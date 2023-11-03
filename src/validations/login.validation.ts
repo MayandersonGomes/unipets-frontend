@@ -1,15 +1,15 @@
 import * as yup from 'yup';
-import { trimString, requiredField } from '@global';
+import { requiredField } from '@global';
 
 export const loginScheme = yup.object({
   email: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField)
     .email('false'),
   password: yup
     .string()
-    .transform(trimString)
+    .trim()
     .required(requiredField)
     .min(8, 'Senha deve conter no mínimo 8 caracteres.'),
 });

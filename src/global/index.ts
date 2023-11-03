@@ -1,8 +1,8 @@
 import { TextStyle } from 'react-native';
 import { IAlignment } from '@interfaces/global.interface'
 
-export const defaultAppTheme: string = '#171717';
-export const defaultButtonColor: string = '#F4516C';
+export const primaryColor: string = '#171717';
+export const secondaryColor: string = '#F4516C';
 export const defaultInputColor: string = '#474444';
 
 export const defaultAlignment: IAlignment = {
@@ -16,6 +16,9 @@ export const defaultTextApp: TextStyle = {
   color: '#ffffff',
 };
 
-export const trimString = (value: string) => value.trim();
+export const messageError: TextStyle = {
+  color: secondaryColor,
+  paddingLeft: 5,
+}
 
 export const requiredField = "Não se esqueça de preencher este campo"

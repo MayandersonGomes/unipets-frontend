@@ -5,17 +5,18 @@ import GreenCheck from '@images/check/green-check-pass.png';
 import {defaultTextApp} from '@global';
 import {IDynamicErrors} from '@interfaces/DynamicErrors.interface';
 
-const DynamicErrors = ({fields, errors}: IDynamicErrors): JSX.Element => {
+const DynamicErrors: React.FC<IDynamicErrors> = ({
+  fields,
+  errors,
+}): JSX.Element => {
   return (
     <View style={{paddingLeft: 5}}>
       <Text style={styles.title}>Sua senha precisa ter</Text>
       {fields.map((field: any, index: number) => (
-        <View 
-        key={index}
-        style={styles.imageContainer}>
+        <View key={index} style={styles.imageContainer}>
           <Image
-            source={!errors?.message[field.title] ? RedCheck : GreenCheck}
-            style={{width: 12, height: 12 }}
+            source={!errors[field.title] ? RedCheck : GreenCheck}
+            style={{width: 12, height: 12}}
           />
 
           <Text style={styles.label}>{field.label}</Text>
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   label: {
     ...defaultTextApp,
     fontSize: 12,
-    fontFamily: 'Poppins-Regular'
+    fontFamily: 'Poppins-Regular',
   },
 });
 export default DynamicErrors;

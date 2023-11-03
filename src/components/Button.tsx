@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {defaultButtonColor, defaultTextApp} from '@global';
+import {secondaryColor, defaultTextApp} from '@global';
 
 interface StyledButtonProps {
   title: string;
@@ -14,7 +14,12 @@ interface StyledButtonProps {
   isLoading: boolean;
 }
 
-const StyledButton = ({title, isLoading, handle, submit}: StyledButtonProps): JSX.Element => {
+const StyledButton: React.FC<StyledButtonProps> = ({
+  title,
+  isLoading,
+  handle,
+  submit,
+}): JSX.Element => {
   return (
     <TouchableOpacity style={styles.button} onPress={handle(submit)}>
       {isLoading ? (
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: defaultButtonColor,
+    backgroundColor: secondaryColor,
     borderRadius: 7,
   },
   textButton: {

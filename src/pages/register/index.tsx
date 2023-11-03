@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -10,19 +10,14 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {useForm} from 'react-hook-form';
+import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {registerScheme} from '@validations/register.validation';
-import {
-  defaultAppTheme,
-  defaultAlignment,
-  defaultTextApp,
-  defaultInputColor,
-} from '@global';
+import {primaryColor, defaultAlignment, defaultInputColor} from '@global';
 import DynamicFields from '@components/DynamicFields';
 import StyledButton from '@components/Button';
+import StyledTermsOfUse from '@components/TermsOfUse';
 import {IFields} from '@interfaces/DynamicFields.interface';
-import CheckBox from '@images/check/checkbox.png';
 import closedEye from '@images/eye/closed-eye.png';
 import eye from '@images/eye/eye.png';
 import Camera from '@images/camera/camera.png';
@@ -32,66 +27,72 @@ import {Masks} from 'react-native-mask-input';
 
 const Register = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [acceptedTerms, setAcceptedTerms] = useState<boolean>(false);
   const [image, setImage] = useState(DefaultPhoto);
 
   const {
     control,
     handleSubmit,
-    watch,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(registerScheme),
     mode: 'all',
     defaultValues: {
       password: '',
+      termsOfUse: false,
     },
   });
 
-  const signup = () => {
-    setTimeout(() => {
-      Alert.alert('RETORNO DA API');
-    }, 2000);
-  };
+  const fields: IFields[] = useMemo(
+    () => [
+      {name: 'name', label: 'Nome*', capitalize: 'words'},
+      {
+        name: 'cpf',
+        label: 'CPF*',
+        mask: Masks.BRL_CPF,
+        keyboardType: 'number-pad',
+      },
+      {
+        name: 'birthday',
+        label: 'Data de nascimento*',
+        mask: Masks.DATE_DDMMYYYY,
+        keyboardType: 'number-pad',
+      },
+      {
+        name: 'email',
+        label: 'Email*',
+        capitalize: 'none',
+        keyboardType: 'email-address',
+      },
+      {
+        name: 'confirmEmail',
+        label: 'Confirmar email*',
+        capitalize: 'none',
+        keyboardType: 'email-address',
+      },
+      {
+        name: 'password',
+        label: 'Senha*',
+        firstImage: closedEye,
+        lastImage: eye,
+        secure: true,
+        help: true,
+        capitalize: 'none',
+      },
+      {
+        name: 'confirmPassword',
+        label: 'Confirmar senha*',
+        firstImage: closedEye,
+        lastImage: eye,
+        secure: true,
+        capitalize: 'none',
+      },
+    ],
+    [],
+  );
 
-  const fields: IFields[] = [
-    {name: 'name', label: 'Nome*', capitalize: 'words'},
-    {
-      name: 'cpf',
-      label: 'CPF*',
-      mask: Masks.BRL_CPF,
-      keyboardType: 'number-pad',
-    },
-    {
-      name: 'birthday',
-      label: 'Data de nascimento*',
-      mask: Masks.DATE_DDMMYYYY,
-      keyboardType: 'number-pad',
-    },
-    {
-      name: 'email',
-      label: 'Email*',
-      capitalize: 'none',
-      keyboardType: 'email-address',
-    },
-    {
-      name: 'confirmEmail',
-      label: 'Confirmar email*',
-      capitalize: 'none',
-      keyboardType: 'email-address',
-    },
-    {
-      name: 'password',
-      label: 'Senha*',
-      firstImage: closedEye,
-      lastImage: eye,
-      secure: true,
-      help: true,
-      watch: watch,
-      capitalize: 'none',
-    },
-    {name: 'confirmPassword', label: 'Confirmar senha*', capitalize: 'none'},
-  ];
+  const signup = () => {
+    Alert.alert('RETORNO DA API');
+  };
 
   const pickImageFromGalery = async () => {
     try {
@@ -168,32 +169,18 @@ const Register = (): JSX.Element => {
 
             <DynamicFields control={control} errors={errors} fields={fields} />
 
-            <View style={styles.termsContainer}>
-              <TouchableOpacity
-                onPress={() => setAcceptedTerms(!acceptedTerms)}>
-                <View style={styles.checkBox}>
-                  {acceptedTerms && (
-                    <Image source={CheckBox} style={{width: 12, height: 12}} />
-                  )}
-                </View>
-              </TouchableOpacity>
-
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.textTerms}>
-                  Li e estou de acordo com os{' '}
-                </Text>
-
-                <TouchableOpacity>
-                  <Text
-                    style={{
-                      ...styles.textTerms,
-                      textDecorationLine: 'underline',
-                    }}>
-                    termos de uso
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <Controller
+              control={control}
+              name={'termsOfUse'}
+              render={({field: {onChange, value, name}}) => (
+                <StyledTermsOfUse
+                  onChange={onChange}
+                  value={value}
+                  errors={errors}
+                  name={name}
+                />
+              )}
+            />
 
             <StyledButton
               title={'Cadastrar'}
@@ -211,7 +198,7 @@ const Register = (): JSX.Element => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: defaultAppTheme,
+    backgroundColor: primaryColor,
   },
   container: {
     ...defaultAlignment,
@@ -251,24 +238,6 @@ const styles = StyleSheet.create({
   camera: {
     width: 25,
     height: 18,
-  },
-  termsContainer: {
-    gap: 7,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 22,
-    height: 22,
-    borderWidth: 3,
-    borderColor: '#F4516C',
-    borderRadius: 5,
-  },
-  textTerms: {
-    ...defaultTextApp,
-    fontSize: 14,
   },
 });
 

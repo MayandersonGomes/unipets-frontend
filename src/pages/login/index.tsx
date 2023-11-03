@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,16 +8,19 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import {useForm, Controller} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {loginScheme} from '@validations/login.validation';
 import axios from 'axios';
 import {createConfig} from '@services/api';
-import {defaultAppTheme, defaultAlignment, defaultTextApp} from '@global';
-import StyledTextInput from '@components/TextInput';
+import {
+  primaryColor,
+  defaultAlignment,
+  defaultTextApp,
+  secondaryColor,
+} from '@global';
 import DynamicFields from '@components/DynamicFields';
 import StyledButton from '@components/Button';
 import logo from '@images/sets/Unipets.png';
@@ -28,7 +31,7 @@ import eye from '@images/eye/eye.png';
 import closedEye from '@images/eye/closed-eye.png';
 import {showMessage} from 'react-native-flash-message';
 
-const Login = ({navigation}: any): JSX.Element => {
+const Login: React.FC<any> = ({navigation}): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -51,6 +54,29 @@ const Login = ({navigation}: any): JSX.Element => {
     },
   });
 
+  const fields: IFields[] = useMemo(
+    () => [
+      {
+        name: 'email',
+        label: 'E-mail*',
+        firstImage: redCheck,
+        lastImage: greenCheck,
+        watch: watch,
+        capitalize: 'none',
+        keyboardType: 'email-address',
+      },
+      {
+        name: 'password',
+        label: 'Senha*',
+        firstImage: closedEye,
+        lastImage: eye,
+        secure: true,
+        capitalize: 'none',
+      },
+    ],
+    [],
+  );
+
   const signIn = (data: any) => {
     setIsLoading(true);
     const config = createConfig('post', 'users/auth', null, data);
@@ -59,7 +85,8 @@ const Login = ({navigation}: any): JSX.Element => {
         navigation.navigate('Initial');
       })
       .catch(error => {
-        const message = error.response?.data.message || 'Erro ao realizar login!';
+        const message =
+          error.response?.data.message || 'Erro ao realizar login!';
         showMessage({
           message: message,
           type: 'danger',
@@ -77,26 +104,6 @@ const Login = ({navigation}: any): JSX.Element => {
         setIsLoading(false);
       });
   };
-
-  const fields: IFields[] = [
-    {
-      name: 'email',
-      label: 'E-mail*',
-      firstImage: redCheck,
-      lastImage: greenCheck,
-      watch: watch,
-      capitalize: 'none',
-      keyboardType: 'email-address'
-    },
-    {
-      name: 'password',
-      label: 'Senha*',
-      firstImage: closedEye,
-      lastImage: eye,
-      secure: true,
-      capitalize: 'none',
-    },
-  ];
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -132,7 +139,7 @@ const Login = ({navigation}: any): JSX.Element => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: defaultAppTheme,
+    backgroundColor: primaryColor,
   },
   container: {
     ...defaultAlignment,
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
   },
   signup: {
     ...defaultTextApp,
-    color: '#F4516C',
+    color: secondaryColor,
   },
 });
 

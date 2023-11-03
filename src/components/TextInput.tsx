@@ -8,11 +8,19 @@ import {
   TouchableWithoutFeedback,
   Animated,
 } from 'react-native';
-import {defaultTextApp, defaultInputColor, defaultAppTheme} from '@global';
+import {
+  defaultTextApp,
+  defaultInputColor,
+  primaryColor,
+  secondaryColor,
+  messageError,
+} from '@global';
 import {ITextInput} from '@interfaces/Input.interface';
 import DynamicErrors from './DynamicErrors';
 import {IErros} from '@interfaces/DynamicErrors.interface';
 import MaskInput from 'react-native-mask-input';
+import {validatePassword} from '@validations/password.validation';
+import {IValidatePassword} from '@interfaces/Password.interface';
 
 const StyledTextInput: React.FC<ITextInput> = ({
   secure,
@@ -25,11 +33,17 @@ const StyledTextInput: React.FC<ITextInput> = ({
   watch,
   capitalize,
   mask,
-  keyboardType
+  keyboardType,
 }): JSX.Element => {
-  const [placeholderAnimated, setPlaceholderAnim] = useState(
-    new Animated.Value(0),
-  );
+  const [placeholderAnimated] = useState(new Animated.Value(0));
+
+  const [passwordErros, setPasswordErros] = useState<IValidatePassword>({
+    character: false,
+    letter: false,
+    number: false,
+    min: false,
+  });
+
   const [placeholderSize, setPlaceholderSize] = useState(15);
   const [placeholderPadding, setPlaceholderPadding] = useState(0);
 
@@ -44,9 +58,12 @@ const StyledTextInput: React.FC<ITextInput> = ({
 
   const showError = error && message !== 'false';
 
-  const onChangeText = (text: any) => {
+  const onChangeText = (text: string) => {
     const digit = secure ? '' : ' ';
     const cleanedText = text.replace(/ +/g, digit);
+
+    help && setPasswordErros(validatePassword(text));
+
     onChange(cleanedText);
   };
 
@@ -88,7 +105,7 @@ const StyledTextInput: React.FC<ITextInput> = ({
           style={[
             styles.mainContainer,
             error && {
-              borderColor: '#F4516C',
+              borderColor: secondaryColor,
               borderWidth: 1,
             },
           ]}>
@@ -132,13 +149,11 @@ const StyledTextInput: React.FC<ITextInput> = ({
         </View>
       </TouchableWithoutFeedback>
 
-      {showError && message.standardError !== false && (
-        <Text style={{color: '#FFFFFF', paddingLeft: 5}}>{message}</Text>
-      )}
+      {showError && <Text style={{...messageError}}>{message}</Text>}
 
       {help && (
         <View style={{gap: 5}}>
-          <DynamicErrors fields={fields} errors={error} />
+          <DynamicErrors fields={fields} errors={passwordErros} />
         </View>
       )}
     </View>
@@ -172,7 +187,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     ...defaultTextApp,
     color: '#797979',
-    backgroundColor: defaultAppTheme,
+    backgroundColor: primaryColor,
   },
   imageCheck: {
     width: 20,
