@@ -20,7 +20,7 @@ import {
   defaultAlignment,
   defaultTextApp,
   secondaryColor,
-} from '@global';
+} from '@global/index';
 import DynamicFields from '@components/DynamicFields';
 import StyledButton from '@components/Button';
 import logo from '@images/sets/Unipets.png';
@@ -30,9 +30,11 @@ import redCheck from '@images/check/red-check.png';
 import eye from '@images/eye/eye.png';
 import closedEye from '@images/eye/closed-eye.png';
 import {showMessage} from 'react-native-flash-message';
+import useKeyboard from '@global/keyboard';
 
 const Login: React.FC<any> = ({navigation}): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {bottomPadding} = useKeyboard();
 
   useEffect(() => {
     setTimeout(() => {
@@ -108,30 +110,36 @@ const Login: React.FC<any> = ({navigation}): JSX.Element => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle={'light-content'} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Image source={logo} style={styles.logo} />
-          <View style={styles.form}>
-            <DynamicFields control={control} errors={errors} fields={fields} />
+      <View style={{paddingBottom: bottomPadding}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
+            <View style={styles.form}>
+              <DynamicFields
+                control={control}
+                errors={errors}
+                fields={fields}
+              />
 
-            <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
+              <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
+            </View>
+
+            <StyledButton
+              title={'Entrar'}
+              handle={handleSubmit}
+              submit={signIn}
+              isLoading={isLoading}
+            />
+
+            <View style={styles.signupContainer}>
+              <Text style={defaultTextApp}>Ainda não tem conta?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.signup}>Cadastre-se</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
-          <StyledButton
-            title={'Entrar'}
-            handle={handleSubmit}
-            submit={signIn}
-            isLoading={isLoading}
-          />
-
-          <View style={styles.signupContainer}>
-            <Text style={defaultTextApp}>Ainda não tem conta?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.signup}>Cadastre-se</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

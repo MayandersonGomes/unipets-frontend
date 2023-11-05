@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, Text, StyleSheet} from 'react-native';
 import CheckBox from '@images/check/checkbox.png';
-import {defaultTextApp, secondaryColor, messageError} from '@global';
+import {defaultTextApp, secondaryColor, messageError} from '@global/index';
 
 interface StyledTermsOfUseProps {
   name: string;

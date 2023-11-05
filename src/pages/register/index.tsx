@@ -4,7 +4,6 @@ import {
   StatusBar,
   ScrollView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Image,
@@ -13,7 +12,8 @@ import {
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {registerScheme} from '@validations/register.validation';
-import {primaryColor, defaultAlignment, defaultInputColor} from '@global';
+import {primaryColor, defaultAlignment, defaultInputColor} from '@global/index';
+import useKeyboard from '@global/keyboard';
 import DynamicFields from '@components/DynamicFields';
 import StyledButton from '@components/Button';
 import StyledTermsOfUse from '@components/TermsOfUse';
@@ -28,6 +28,7 @@ import {Masks} from 'react-native-mask-input';
 const Register = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [image, setImage] = useState(DefaultPhoto);
+  const {bottomPadding} = useKeyboard();
 
   const {
     control,
@@ -145,52 +146,58 @@ const Register = (): JSX.Element => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle={'dark-content'} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <View style={styles.form}>
-            <View style={{alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={handleImageUser}
-                style={styles.imageContainer}>
-                <Image
-                  style={styles.image}
-                  source={typeof image === 'string' ? {uri: image} : image}
-                />
-
-                <View style={styles.cameraContainer}>
+      <View style={{paddingBottom: bottomPadding}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <View style={styles.form}>
+              <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={handleImageUser}
+                  style={styles.imageContainer}>
                   <Image
-                    style={styles.camera}
-                    resizeMode="contain"
-                    source={Camera}
+                    style={styles.image}
+                    source={typeof image === 'string' ? {uri: image} : image}
                   />
-                </View>
-              </TouchableOpacity>
+
+                  <View style={styles.cameraContainer}>
+                    <Image
+                      style={styles.camera}
+                      resizeMode="contain"
+                      source={Camera}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <DynamicFields
+                control={control}
+                errors={errors}
+                fields={fields}
+              />
+
+              <Controller
+                control={control}
+                name={'termsOfUse'}
+                render={({field: {onChange, value, name}}) => (
+                  <StyledTermsOfUse
+                    onChange={onChange}
+                    value={value}
+                    errors={errors}
+                    name={name}
+                  />
+                )}
+              />
+
+              <StyledButton
+                title={'Cadastrar'}
+                handle={handleSubmit}
+                submit={signup}
+                isLoading={isLoading}
+              />
             </View>
-
-            <DynamicFields control={control} errors={errors} fields={fields} />
-
-            <Controller
-              control={control}
-              name={'termsOfUse'}
-              render={({field: {onChange, value, name}}) => (
-                <StyledTermsOfUse
-                  onChange={onChange}
-                  value={value}
-                  errors={errors}
-                  name={name}
-                />
-              )}
-            />
-
-            <StyledButton
-              title={'Cadastrar'}
-              handle={handleSubmit}
-              submit={signup}
-              isLoading={isLoading}
-            />
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Image, Text, StyleSheet} from 'react-native';
 import RedCheck from '@images/check/red-check-pass.png';
 import GreenCheck from '@images/check/green-check-pass.png';
-import {defaultTextApp} from '@global';
+import {defaultTextApp} from '@global/index';
 import {IDynamicErrors} from '@interfaces/DynamicErrors.interface';
 
 const DynamicErrors: React.FC<IDynamicErrors> = ({

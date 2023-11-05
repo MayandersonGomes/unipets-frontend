@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { requiredField } from '@global';
+import { requiredField } from '@global/index';
 
 export const loginScheme = yup.object({
   email: yup

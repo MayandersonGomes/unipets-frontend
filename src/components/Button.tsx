@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {secondaryColor, defaultTextApp} from '@global';
+import {secondaryColor, defaultTextApp} from '@global/index';
 
 interface StyledButtonProps {
   title: string;

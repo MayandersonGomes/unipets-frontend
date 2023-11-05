@@ -14,7 +14,7 @@ import {
   primaryColor,
   secondaryColor,
   messageError,
-} from '@global';
+} from '@global/index';
 import {ITextInput} from '@interfaces/Input.interface';
 import DynamicErrors from './DynamicErrors';
 import {IErros} from '@interfaces/DynamicErrors.interface';

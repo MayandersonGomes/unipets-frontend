@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { requiredField } from '@global';
+import { requiredField } from '@global/index';
 import { parse, isValid } from 'date-fns';
 import { isStrongPassword } from './password.validation';
 
