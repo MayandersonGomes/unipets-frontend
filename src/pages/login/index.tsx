@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
   container: {
     ...defaultAlignment,
     marginTop: 100,
-    marginBottom: 30,
     gap: 50,
   },
   logo: {

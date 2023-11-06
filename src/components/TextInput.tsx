@@ -19,7 +19,7 @@ import {ITextInput} from '@interfaces/Input.interface';
 import DynamicErrors from './DynamicErrors';
 import {IErros} from '@interfaces/DynamicErrors.interface';
 import MaskInput from 'react-native-mask-input';
-import {validatePassword} from '@validations/password.validation';
+import {validatePassword} from '@utils/password.validation';
 import {IValidatePassword} from '@interfaces/Password.interface';
 
 const StyledTextInput: React.FC<ITextInput> = ({

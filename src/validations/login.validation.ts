@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import yup from '@global/yup';
 import { requiredField } from '@global/index';
 
 export const loginScheme = yup.object({
@@ -6,7 +6,7 @@ export const loginScheme = yup.object({
     .string()
     .trim()
     .required(requiredField)
-    .email('false'),
+    .fullEmail('false'),
   password: yup
     .string()
     .trim()

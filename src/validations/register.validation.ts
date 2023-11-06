@@ -1,7 +1,5 @@
-import * as yup from 'yup';
+import yup from '@global/yup';
 import { requiredField } from '@global/index';
-import { parse, isValid } from 'date-fns';
-import { isStrongPassword } from './password.validation';
 
 export const registerScheme = yup.object({
   name: yup
@@ -12,42 +10,29 @@ export const registerScheme = yup.object({
   cpf: yup
     .string()
     .trim()
+    .cpf()
     .required(requiredField),
   birthday: yup
     .string()
     .trim()
-    .required(requiredField)
-    .test(
-      'valid-date',
-      'Informe uma data de nascimento válida',
-      (value) => {
-        const date = parse(value, 'dd/MM/yyyy', new Date());
-        return isValid(date);
-      }
-    ),
+    .date()
+    .required(requiredField),
   email: yup
     .string()
     .trim()
-    .email('Informe um email válido')
+    .fullEmail()
     .required(requiredField),
   confirmEmail: yup
     .string()
     .trim()
-    .email('Informe um email válido')
+    .fullEmail()
     .required(requiredField)
     .oneOf([yup.ref('email')], 'Os endereços de e-mail devem ser idênticos.'),
   password: yup
     .string()
     .trim()
-    .required(requiredField)
-    .test(
-      'custom-validation',
-      'false',
-      (value) => {
-        const { character, letter, number, min } = isStrongPassword(value);
-        return character && letter && number && min;
-      }
-    ),
+    .password('false')
+    .required(requiredField),
   confirmPassword: yup
     .string()
     .trim()
