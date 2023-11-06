@@ -123,6 +123,7 @@ const StyledTextInput: React.FC<ITextInput> = ({
               secureTextEntry={isSecure}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              textContentType='oneTimeCode'
             />
 
             <Animated.Text
