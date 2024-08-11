@@ -5,5 +5,6 @@
     "titleBar.inactiveBackground": "#F4516C",
     "titleBar.activeForeground": "#F6FBF9",
     "titleBar.inactiveForeground": "#F6FBF9",
-  }
+  },
+  "editor.inlineSuggest.showToolbar": "onHover"
 }

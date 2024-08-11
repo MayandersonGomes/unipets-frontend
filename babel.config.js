@@ -20,6 +20,7 @@ module.exports = {
           '@routes': './src/routes',
           '@services': './src/services',
           '@interfaces': './src/types/interfaces',
+          '@utils': './src/utils',
           '@validations': './src/validations',
         },
       },
