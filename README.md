@@ -1,81 +1,71 @@
 # Unipets Frontend
 
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+Este projeto, idealizado durante a cadeira de Desafios do Ciberespaço na Universidade de Fortaleza (Unifor), visa reduzir o número de animais em situação de rua ao unir doadores, adotantes, ONGs, clínicas e hospitais veterinários em um espaço centralizado para adoção e cuidados.
 
-# Getting Started
+Esta seção foca no front-end do projeto, responsável pela interface e experiência do usuário. Para acessar o back-end, [clique aqui](https://github.com/Interlis/interlis-backend) ou acesse o link https://github.com/Interlis/interlis-backend.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Visão Geral
 
-## Step 1: Start the Metro Server
+O projeto foi idealizado durante a disciplina, com foco na concepção da solução. Seu desenvolvimento avançou além das exigências acadêmicas, mas ainda não foi concluído.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+Optei pelo React Native devido à proposta de criar um aplicativo, proporcionando um espaço virtual dedicado à resolução do problema. Escolhi React por ser um dos principais frameworks para desenvolvimento de apps multiplataforma.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+---
+
+# Rodando o projeto
+
+## Passo 1: Instalar as Dependências  
+
+Antes de iniciar, instale as bibliotecas necessárias executando o seguinte comando no diretório _raiz_ do projeto:  
 
 ```bash
-# using npm
+# usando npm
+npm install
+
+# OU usando Yarn
+yarn install
+```
+
+## Passo 2: Iniciar o Metro Server  
+
+Primeiro, você precisará iniciar o **Metro**, o _bundler_ JavaScript que acompanha o React Native.  
+
+Para iniciar o Metro, execute o seguinte comando no diretório _raiz_ do projeto:  
+
+```bash
+# usando npm
 npm start
 
-# OR using Yarn
+# OU usando Yarn
 yarn start
 ```
 
-## Step 2: Start your Application
+## Passo 3: Iniciar o Aplicativo  
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Deixe o Metro Bundler rodando em um _terminal separado_. Abra um _novo_ terminal no diretório _raiz_ do projeto e execute o seguinte comando para iniciar o app no _Android_ ou _iOS_:  
 
-### For Android
+### Para Android  
 
 ```bash
-# using npm
+# usando npm
 npm run android
 
-# OR using Yarn
+# OU usando Yarn
 yarn android
 ```
 
-### For iOS
+### Para iOS  
 
 ```bash
-# using npm
+# usando npm
 npm run ios
 
-# OR using Yarn
+# OU usando Yarn
 yarn ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+Se tudo estiver configurado _corretamente_, o app deverá ser executado no _Emulador Android_ ou _Simulador iOS_ em breve, desde que você tenha configurado corretamente seu ambiente de desenvolvimento.  
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Essa é uma das formas de rodar o aplicativo — você também pode executá-lo diretamente pelo Android Studio ou Xcode.
 
-## Step 3: Modifying your App
 
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
